@@ -36,7 +36,7 @@ local function reconnect_schedules_restart()
       },
       ["android.ui.panel_header"] = {
         logcat_lines = function()
-          return { "Package: com.app", "Filter: ", "Level: " }
+          return { "Package: com.app", "Filter: ", "Level: ", "Device: device-1" }
         end,
       },
       ["android.logcat.command"] = {
@@ -153,7 +153,7 @@ local function reconnect_stops_after_max_attempts()
       },
       ["android.ui.panel_header"] = {
         logcat_lines = function()
-          return { "Package: com.app", "Filter: ", "Level: " }
+          return { "Package: com.app", "Filter: ", "Level: ", "Device: device-1" }
         end,
       },
       ["android.logcat.command"] = {

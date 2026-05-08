@@ -21,12 +21,12 @@ updates package selection to the deployed app.
 
 Logcat uses a two-layer bottom dock:
 
-- Control strip (fixed): package, filter, level rows
+- Control strip (fixed): package, filter, level, and device rows
 - Stream body: log output
 
 `<CR>` behavior:
 
-- On control strip rows: edit package, filter, or level.
+- On control strip rows: edit package, filter, level, or device.
 - In stream body: open stack trace navigation when available.
 
 ## Controls
@@ -41,12 +41,15 @@ Logcat uses a two-layer bottom dock:
 | `gp` | Pick package filter |
 | `gf` | Edit filter text |
 | `gl` | Pick level filter |
+| `gd` | Pick device |
 | `gs` | Switch run config |
 
 ## Filter Rules
 
 - Space-separated terms: every term must match the line.
 - Regex pattern: wrap in `/.../`.
+- Device selection uses the selected adb serial and restarts logcat with
+  `adb -s <serial> logcat`.
 
 Examples:
 

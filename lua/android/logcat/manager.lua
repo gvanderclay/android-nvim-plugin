@@ -12,7 +12,7 @@ M.default_max_lines = session_module.default_max_lines
 
 local sessions = {}
 local active_config_id = nil
-local DEFAULT_CONTROL_HEIGHT = 3
+local DEFAULT_CONTROL_HEIGHT = 4
 
 local function load_latest_state(workspace_root, fallback_state)
   if not workspace_root or workspace_root == "" then
@@ -72,11 +72,15 @@ end
 local function resolve_logcat_state(state, config_id)
   local next_state = state or {}
   next_state.logcat = next_state.logcat or {}
+  local device_serial = next_state.device and next_state.device.serial or nil
   local sessions_state = next_state.logcat.sessions
   if sessions_state and sessions_state[config_id] then
     local saved = sessions_state[config_id]
     if saved.filter_history == nil then
       saved.filter_history = next_state.logcat.filter_history or {}
+    end
+    if saved.serial == nil or saved.serial == "" then
+      saved.serial = next_state.logcat.serial or device_serial
     end
     return saved, next_state
   end
@@ -86,7 +90,7 @@ local function resolve_logcat_state(state, config_id)
       filter = next_state.logcat.filter or "",
       filter_history = next_state.logcat.filter_history or {},
       level = next_state.logcat.level or "",
-      serial = next_state.logcat.serial,
+      serial = next_state.logcat.serial or device_serial,
     }, next_state
   end
   return {
@@ -94,7 +98,7 @@ local function resolve_logcat_state(state, config_id)
     filter = "",
     filter_history = next_state.logcat.filter_history or {},
     level = next_state.logcat.level or "",
-    serial = next_state.logcat.serial,
+    serial = next_state.logcat.serial or device_serial,
   }, next_state
 end
 

@@ -14,7 +14,7 @@ local function header_renders_saved_values()
   logcat_helpers.with_logcat_context({ state = state }, function(ctx)
     assert.table_eq(
       ctx.header_lines.value,
-      { "Package: com.saved", "Filter: Activity", "Level: " },
+      { "Package: com.saved", "Filter: Activity", "Level: ", "Device: device-1" },
       "header lines"
     )
   end)
@@ -108,7 +108,7 @@ local function header_rerenders_after_filter_input()
     logcat_helpers.start_filter_edit(ctx)
     assert.table_eq(
       ctx.header_lines.value,
-      { "Package: com.saved", "Filter: NewFilter", "Level: " },
+      { "Package: com.saved", "Filter: NewFilter", "Level: ", "Device: device-1" },
       "header after filter input"
     )
   end)

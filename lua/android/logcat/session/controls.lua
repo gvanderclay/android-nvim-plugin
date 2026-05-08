@@ -20,6 +20,12 @@ end
 local function processes()
   return require("android.logcat.processes")
 end
+local function adb()
+  return require("android.devices.adb")
+end
+local function defaults()
+  return require("android.actions.defaults")
+end
 local function stack_trace()
   return require("android.logcat.stack_trace")
 end
@@ -80,6 +86,19 @@ local function update_package(session, value, deps)
   deps.restart_logcat(session)
 end
 
+local function update_device(session, value, deps)
+  local next_serial = normalize_input(value)
+  if next_serial == session.serial then
+    return
+  end
+  session.serial = next_serial
+  if session.persist_state then
+    session.persist_state({ serial = next_serial })
+  end
+  render().render_header(session)
+  deps.restart_logcat(session)
+end
+
 local function persist_filter_history(session, value)
   local next_history = history().push(session.filter_history, value, { limit = 20 })
   session.filter_history = next_history
@@ -117,6 +136,7 @@ local function start_filter_edit(session, deps)
         package = session.package,
         filter = value,
         level = session.level,
+        serial = session.serial,
       })
     end,
     on_change = function(value)
@@ -146,6 +166,54 @@ local function select_level(session, deps)
     items = levels,
     on_select = function(value)
       update_level(session, value, deps)
+    end,
+  })
+end
+
+local function device_entries(devices)
+  local entries = {}
+  for _, device in ipairs(devices or {}) do
+    if device.state == "device" and device.serial and device.serial ~= "" then
+      local label = device.serial
+      if device.model and device.model ~= "" then
+        label = label .. " " .. device.model
+      end
+      table.insert(entries, { label = label, value = device.serial })
+    end
+  end
+  return entries
+end
+
+local function select_device(session, deps)
+  if not session.adb_path or session.adb_path == "" then
+    local input = vim.fn.input("Logcat device: ", session.serial or "")
+    update_device(session, input, deps)
+    return
+  end
+  local devices = adb().list(session.runner, session.adb_path)
+  local entries = device_entries(devices)
+  if #entries == 0 then
+    local input = vim.fn.input("Logcat device: ", session.serial or "")
+    update_device(session, input, deps)
+    return
+  end
+  local selected = defaults().select_device_serial(devices, session.serial)
+  local default = nil
+  if selected and selected ~= "" then
+    for _, entry in ipairs(entries) do
+      if entry.value == selected then
+        default = entry.label
+        break
+      end
+    end
+  end
+  picker().select_from_list({
+    title = "Select logcat device",
+    items = entries,
+    format = function(entry) return entry.label end,
+    default = default,
+    on_select = function(value)
+      update_device(session, value, deps)
     end,
   })
 end
@@ -182,6 +250,10 @@ local function handle_header_enter(session, line, deps)
   end
   if line == 3 then
     select_level(session, deps)
+    return true
+  end
+  if line == 4 then
+    select_device(session, deps)
     return true
   end
   return false
@@ -264,6 +336,7 @@ local function setup_keymaps(session, deps)
   map("gp", function() select_package(session, deps) end)
   map("gf", function() start_filter_edit(session, deps) end)
   map("gl", function() select_level(session, deps) end)
+  map("gd", function() select_device(session, deps) end)
   map("gs", function() session.on_switch() end)
   map("<CR>", function()
     local current_win = vim.api.nvim_get_current_win()
@@ -289,8 +362,10 @@ end
 M.update_filter = update_filter
 M.update_package = update_package
 M.update_level = update_level
+M.update_device = update_device
 M.start_filter_edit = start_filter_edit
 M.select_level = select_level
+M.select_device = select_device
 M.select_package = select_package
 M.handle_header_enter = handle_header_enter
 M.enqueue = enqueue

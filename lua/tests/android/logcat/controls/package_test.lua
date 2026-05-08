@@ -75,7 +75,7 @@ local function header_rerenders_after_package_change()
   logcat_helpers.with_logcat_and_enter({ state = state, stubs = stubs }, 1, function()
     assert.table_eq(
       header_calls[2],
-      { "Package: com.new.app", "Filter: Old", "Level: " },
+      { "Package: com.new.app", "Filter: Old", "Level: ", "Device: device-1" },
       "header after package change"
     )
   end)
@@ -237,7 +237,11 @@ local function open_without_adb_opens_panel_and_renders_header()
   }, function()
     local header = table.concat(header_lines.value or {}, "|")
     local summary = string.format("%d|%s", panel_open_calls.count, header)
-    assert.eq(summary, "1|Package: com.saved|Filter: Saved|Level: ", "panel opened")
+    assert.eq(
+      summary,
+      "1|Package: com.saved|Filter: Saved|Level: |Device: device-1",
+      "panel opened"
+    )
   end)
 end
 

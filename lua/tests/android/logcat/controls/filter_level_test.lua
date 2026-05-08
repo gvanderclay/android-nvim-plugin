@@ -49,7 +49,7 @@ local function level_picker_updates_header()
     ctx.vim_state.keymaps["n"]["gl"]()
     assert.table_eq(
       ctx.header_lines.value,
-      { "Package: com.saved", "Filter: Old", "Level: W" },
+      { "Package: com.saved", "Filter: Old", "Level: W", "Device: device-1" },
       "header after level"
     )
   end)
