@@ -72,10 +72,14 @@ end
 local function fallback_filter_input(options)
   local title = options.prompt_title or "Filter"
   local prompt = options.input_prompt or title
+  local input_title = options.input_title
+  if input_title == nil then
+    input_title = options.input_prompt and "" or title
+  end
   local ok_input, input = pcall(require, "android.ui.input")
   if ok_input and input and type(input.prompt) == "function" then
     input.prompt({
-      title = title,
+      title = input_title,
       prompt = prompt,
       default = options.default or "",
       on_change = options.on_change,

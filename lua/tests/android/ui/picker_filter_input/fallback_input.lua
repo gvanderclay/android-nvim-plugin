@@ -120,6 +120,11 @@ local function filter_input_fallback_uses_custom_prompt()
   assert.eq(result.captured.prompt, "Filter: ", "input prompt")
 end
 
+local function filter_input_fallback_omits_title_for_custom_prompt()
+  local result = run_filter_input_without_telescope({ input_prompt = "Filter: " })
+  assert.eq(result.captured.title, "", "input title")
+end
+
 local function filter_input_fallback_sets_default()
   local result = run_filter_input_without_telescope()
   assert.eq(result.captured.default, "old", "input default")
@@ -150,6 +155,7 @@ function M.run()
   filter_input_fallback_sets_title()
   filter_input_fallback_sets_prompt()
   filter_input_fallback_uses_custom_prompt()
+  filter_input_fallback_omits_title_for_custom_prompt()
   filter_input_fallback_sets_default()
   filter_input_fallback_calls_on_change()
   filter_input_fallback_calls_on_accept()
