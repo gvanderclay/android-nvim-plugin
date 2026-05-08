@@ -8,8 +8,8 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 ### Added
 
-- Logcat panels can now select a target device with `gd` or the `Device`
-  header row, and direct logcat opens honor the saved default device when no
+- Logcat panels can now select a target device from the `Device` header row,
+  and direct logcat opens honor the saved default device when no
   logcat-specific device is set.
 
 ### Changed

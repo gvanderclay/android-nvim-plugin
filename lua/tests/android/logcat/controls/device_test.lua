@@ -33,12 +33,11 @@ local function device_picker_stubs(serial)
   }
 end
 
-local function device_change_restarts_logcat()
+local function device_header_change_restarts_logcat()
   local state = state_with_device("device-1")
   local stubs = device_picker_stubs("emulator-5554")
 
-  logcat_helpers.with_logcat_context({ state = state, stubs = stubs }, function(ctx)
-    ctx.vim_state.keymaps["n"]["gd"]()
+  logcat_helpers.with_logcat_and_enter({ state = state, stubs = stubs }, 4, function(ctx)
     assert.table_eq(
       { ctx.spawn_calls.count, ctx.clear_body_calls.count },
       { 2, 1 },
@@ -47,22 +46,20 @@ local function device_change_restarts_logcat()
   end)
 end
 
-local function device_change_persists_state()
-  local state = state_with_device("device-1")
-  local stubs = device_picker_stubs("emulator-5554")
-
-  logcat_helpers.with_logcat_context({ state = state, stubs = stubs }, function(ctx)
-    ctx.vim_state.keymaps["n"]["gd"]()
-    assert.eq(ctx.state.logcat.serial, "emulator-5554", "device persisted")
-  end)
-end
-
-local function header_enter_selects_device()
+local function device_header_change_persists_state()
   local state = state_with_device("device-1")
   local stubs = device_picker_stubs("emulator-5554")
 
   logcat_helpers.with_logcat_and_enter({ state = state, stubs = stubs }, 4, function(ctx)
-    assert.eq(ctx.state.logcat.serial, "emulator-5554", "header device selection")
+    assert.eq(ctx.state.logcat.serial, "emulator-5554", "device persisted")
+  end)
+end
+
+local function gd_is_not_mapped_by_logcat()
+  local state = state_with_device("device-1")
+
+  logcat_helpers.with_logcat_context({ state = state }, function(ctx)
+    assert.eq(ctx.vim_state.keymaps["n"]["gd"], nil, "gd left available")
   end)
 end
 
@@ -81,7 +78,7 @@ local function device_fallback_uses_input_without_adb()
     vim_opts = { input_value = "usb-1234" },
     stubs = stubs,
   }, function(ctx)
-    ctx.vim_state.keymaps["n"]["gd"]()
+    logcat_helpers.press_enter(ctx, 4)
     local call = ctx.vim_state.input_calls[1] or {}
     local summary = string.format(
       "%d|%s|%s|%s",
@@ -95,9 +92,9 @@ local function device_fallback_uses_input_without_adb()
 end
 
 function M.run()
-  device_change_restarts_logcat()
-  device_change_persists_state()
-  header_enter_selects_device()
+  device_header_change_restarts_logcat()
+  device_header_change_persists_state()
+  gd_is_not_mapped_by_logcat()
   device_fallback_uses_input_without_adb()
 end
 

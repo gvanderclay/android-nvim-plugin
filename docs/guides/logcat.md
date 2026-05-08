@@ -41,7 +41,6 @@ Logcat uses a two-layer bottom dock:
 | `gp` | Pick package filter |
 | `gf` | Edit filter text |
 | `gl` | Pick level filter |
-| `gd` | Pick device |
 | `gs` | Switch run config |
 
 ## Filter Rules
@@ -65,7 +64,7 @@ Examples:
 ## Recommended Flow
 
 1. Open logcat with `:AndroidLogcat`.
-1. Set package and level from the control strip.
+1. Set package, level, and device from the control strip.
 1. Add a text or regex filter to reduce noise.
 1. Pause while inspecting long output, then resume to flush backlog.
 1. Press `<CR>` on stack-trace lines to jump to source.

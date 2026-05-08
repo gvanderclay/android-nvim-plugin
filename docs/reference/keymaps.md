@@ -73,7 +73,6 @@ vim.keymap.set("n", "<leader>ar", "<Plug>(AndroidRun)", { remap = true, silent =
 | `gp` | Select package |
 | `gf` | Edit text filter |
 | `gl` | Select level |
-| `gd` | Select device |
 | `gs` | Switch run config |
 | `<CR>` | Header: edit field. Body: stack trace jump |
 
