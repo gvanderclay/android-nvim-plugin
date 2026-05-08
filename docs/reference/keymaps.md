@@ -76,12 +76,6 @@ vim.keymap.set("n", "<leader>ar", "<Plug>(AndroidRun)", { remap = true, silent =
 | `gs` | Switch run config |
 | `<CR>` | Header: edit field. Body: stack trace jump |
 
-The logcat header includes package, filter, level, and device rows. Device
-selection is available by moving to the `Device:` row and pressing `<CR>`.
-Logcat intentionally does not bind `gd`, so normal editor or LSP
-go-to-definition mappings remain available. If you prefer a direct device
-shortcut, choose a local override such as `ge` in your own config.
-
 ## Build Output Dock Controls
 
 | Key | Action |
