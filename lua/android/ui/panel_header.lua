@@ -54,6 +54,7 @@ function M.logcat_lines(opts)
     string.format("Package: %s", normalize_value(options.package)),
     string.format("Filter: %s", normalize_value(options.filter)),
     string.format("Level: %s", normalize_value(options.level)),
+    string.format("Device: %s", normalize_value(options.serial)),
   }
 end
 
@@ -72,6 +73,7 @@ function M.logcat_panel_names(opts)
     { key = "app", value = options.package },
     { key = "filter", value = options.filter },
     { key = "level", value = options.level },
+    { key = "device", value = options.serial },
   })
 end
 
@@ -103,6 +105,7 @@ function M.logcat_filter_panel_names(opts)
     { key = "app", value = options.package },
     { key = "filter", value = options.filter },
     { key = "level", value = options.level },
+    { key = "device", value = options.serial },
   })
 end
 

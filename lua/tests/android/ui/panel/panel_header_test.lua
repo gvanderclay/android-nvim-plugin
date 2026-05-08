@@ -14,19 +14,21 @@ local function logcat_header_returns_package_and_filter_lines()
   local lines = header.logcat_lines({
     package = "com.example.app",
     filter = "Activity",
+    serial = "emulator-5554",
   })
 
-  assert.eq(#lines, 3, "logcat line count")
+  assert.eq(#lines, 4, "logcat line count")
   assert.eq(lines[1], "Package: com.example.app", "package line")
   assert.eq(lines[2], "Filter: Activity", "filter line")
   assert.eq(lines[3], "Level: ", "level line")
+  assert.eq(lines[4], "Device: emulator-5554", "device line")
 end
 
 local function logcat_header_defaults_to_empty_values()
   local header = load_header()
 
   local lines = header.logcat_lines()
-  assert.table_eq(lines, { "Package: ", "Filter: ", "Level: " }, "logcat defaults")
+  assert.table_eq(lines, { "Package: ", "Filter: ", "Level: ", "Device: " }, "logcat defaults")
 end
 
 local function build_header_returns_filter_line()
@@ -52,16 +54,17 @@ local function logcat_panel_names_include_selected_values()
     package = "com.example.app",
     filter = "Auth",
     level = "W",
+    serial = "emulator-5554",
   })
 
   assert.eq(
     names.body,
-    "android://logcat module=:app variant=debug app=com.example.app filter=Auth level=W",
+    "android://logcat module=:app variant=debug app=com.example.app filter=Auth level=W device=emulator-5554",
     "logcat body name"
   )
   assert.eq(
     names.control,
-    "android://logcat-controls module=:app variant=debug app=com.example.app filter=Auth level=W",
+    "android://logcat-controls module=:app variant=debug app=com.example.app filter=Auth level=W device=emulator-5554",
     "logcat control name"
   )
 end

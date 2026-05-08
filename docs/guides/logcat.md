@@ -21,12 +21,12 @@ updates package selection to the deployed app.
 
 Logcat uses a two-layer bottom dock:
 
-- Control strip (fixed): package, filter, level rows
+- Control strip (fixed): package, filter, level, and device rows
 - Stream body: log output
 
 `<CR>` behavior:
 
-- On control strip rows: edit package, filter, or level.
+- On control strip rows: edit package, filter, level, or device.
 - In stream body: open stack trace navigation when available.
 
 ## Controls
@@ -47,6 +47,8 @@ Logcat uses a two-layer bottom dock:
 
 - Space-separated terms: every term must match the line.
 - Regex pattern: wrap in `/.../`.
+- Device selection uses the selected adb serial and restarts logcat with
+  `adb -s <serial> logcat`.
 
 Examples:
 
@@ -62,7 +64,7 @@ Examples:
 ## Recommended Flow
 
 1. Open logcat with `:AndroidLogcat`.
-1. Set package and level from the control strip.
+1. Set package, level, and device from the control strip.
 1. Add a text or regex filter to reduce noise.
 1. Pause while inspecting long output, then resume to flush backlog.
 1. Press `<CR>` on stack-trace lines to jump to source.

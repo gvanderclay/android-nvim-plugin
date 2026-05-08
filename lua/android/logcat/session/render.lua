@@ -19,6 +19,7 @@ local function build_header_lines(session)
     package = session.package,
     filter = session.filter,
     level = session.level,
+    serial = session.serial,
   })
 end
 
@@ -34,6 +35,7 @@ local function render_header(session)
       package = session.package,
       filter = session.filter,
       level = session.level,
+      serial = session.serial,
     }))
   end
   panel().set_header_lines(build_header_lines(session))

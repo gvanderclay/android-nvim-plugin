@@ -15,11 +15,20 @@ local reconnect = require("android.logcat.reconnect")
 local strings = require("android.utils.strings")
 local DEFAULT_MAX_LINES = 2000
 M.default_max_lines = DEFAULT_MAX_LINES
-local function resolve_pid(runner, adb_path, package_name)
+local function resolve_pid(runner, adb_path, serial, package_name)
   if not package_name or package_name == "" then
     return nil
   end
-  local result = runner.run({ adb_path, "shell", "pidof", "-s", package_name })
+  local cmd = { adb_path }
+  if serial and serial ~= "" then
+    table.insert(cmd, "-s")
+    table.insert(cmd, serial)
+  end
+  table.insert(cmd, "shell")
+  table.insert(cmd, "pidof")
+  table.insert(cmd, "-s")
+  table.insert(cmd, package_name)
+  local result = runner.run(cmd)
   if not result or not result.ok then
     return nil
   end
@@ -51,7 +60,7 @@ local function stop_logcat_job(session)
   session.logcat_job = nil
 end
 local function build_logcat_command(session)
-  local pid = resolve_pid(session.runner, session.adb_path, session.package)
+  local pid = resolve_pid(session.runner, session.adb_path, session.serial, session.package)
   if pid then
     session.waiting_for_process = false
   else
@@ -158,7 +167,7 @@ function M.new(opts)
     adb_path = opts.adb_path,
     runner = opts.runner,
     state = opts.state,
-    header_count = 3,
+    header_count = 4,
     max_lines = opts.max_lines or DEFAULT_MAX_LINES,
     status_message = nil,
     waiting_for_process = false,

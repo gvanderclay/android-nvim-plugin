@@ -119,7 +119,7 @@ local function switcher_preserves_session_body_and_header()
     assert.is_true(ctx.vim_state.keymaps["n"]["gs"] ~= nil, "switch keymap")
     assert.table_eq(
       ctx.header_lines.value,
-      { "Package: com.android", "Filter: Main", "Level: " },
+      { "Package: com.android", "Filter: Main", "Level: ", "Device: device-1" },
       "initial header"
     )
 
@@ -130,7 +130,7 @@ local function switcher_preserves_session_body_and_header()
     ctx.vim_state.keymaps["n"]["gs"]()
     assert.table_eq(
       ctx.header_lines.value,
-      { "Package: com.ios", "Filter: Ui", "Level: " },
+      { "Package: com.ios", "Filter: Ui", "Level: ", "Device: device-1" },
       "ios header"
     )
     assert.eq(#body_lines(ctx.vim_state), 0, "ios body empty")
@@ -175,7 +175,7 @@ local function open_uses_dock_panel_layout()
   }, function(ctx)
     ctx.manager.open()
     assert.eq(open_options and open_options.layout, "dock", "panel layout")
-    assert.eq(open_options and open_options.control_height, 3, "panel control height")
+    assert.eq(open_options and open_options.control_height, 4, "panel control height")
   end)
 end
 
@@ -195,6 +195,31 @@ local function open_uses_saved_run_config_without_resolve()
   }, function(ctx)
     ctx.manager.open()
     assert.eq(ctx.registry_calls.resolve, 0, "resolve skipped")
+  end)
+end
+
+local function open_uses_global_device_default_for_logcat()
+  local seen_saved = nil
+
+  manager_context({
+    state = {
+      device = { serial = "emulator-5554" },
+      logcat = {
+        package = "com.saved",
+      },
+    },
+    stubs = {
+      ["android.actions.defaults"] = {
+        select_device_serial = function(_, saved)
+          seen_saved = saved
+          return saved
+        end,
+      },
+    },
+  }, function(ctx)
+    ctx.manager.open()
+    assert.eq(seen_saved, "emulator-5554", "global device used")
+    assert.eq(ctx.state.logcat.serial, "emulator-5554", "logcat serial persisted")
   end)
 end
 
@@ -366,6 +391,7 @@ function M.run()
   open_uses_dock_panel_layout()
   open_sets_restore_on_startup_flag()
   open_uses_saved_run_config_without_resolve()
+  open_uses_global_device_default_for_logcat()
   closing_panel_clears_restore_on_startup_flag()
   restore_on_startup_opens_logcat_when_enabled()
   restore_on_startup_skips_when_disabled()

@@ -20,7 +20,7 @@ local function with_stack_trace_context(callback)
     },
   }
 
-  logcat_helpers.with_logcat_and_enter({ state = state, stubs = stubs }, 4, function(ctx)
+  logcat_helpers.with_logcat_and_enter({ state = state, stubs = stubs }, 5, function(ctx)
     callback(ctx, parser_calls)
   end)
 end

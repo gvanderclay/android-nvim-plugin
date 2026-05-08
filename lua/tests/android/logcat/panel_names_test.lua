@@ -27,12 +27,12 @@ local function open_sets_panel_names_from_selected_values()
     local names = panel_names.value or {}
     assert.eq(
       names.body,
-      "android://logcat module=:app variant=debug app=com.saved filter=Auth level=W",
+      "android://logcat module=:app variant=debug app=com.saved filter=Auth level=W device=device-1",
       "body panel name"
     )
     assert.eq(
       names.control,
-      "android://logcat-controls module=:app variant=debug app=com.saved filter=Auth level=W",
+      "android://logcat-controls module=:app variant=debug app=com.saved filter=Auth level=W device=device-1",
       "control panel name"
     )
   end)
@@ -51,7 +51,7 @@ local function package_change_updates_panel_names()
     local names = panel_names.value or {}
     assert.eq(
       names.body,
-      "android://logcat module=:app variant=debug app=com.changed filter=Auth level=W",
+      "android://logcat module=:app variant=debug app=com.changed filter=Auth level=W device=device-1",
       "body name after package"
     )
   end)
@@ -78,7 +78,7 @@ local function filter_change_updates_panel_names()
     local names = panel_names.value or {}
     assert.eq(
       names.body,
-      "android://logcat module=:app variant=debug app=com.saved filter=Crash level=W",
+      "android://logcat module=:app variant=debug app=com.saved filter=Crash level=W device=device-1",
       "body name after filter"
     )
   end)
@@ -105,7 +105,7 @@ local function level_change_updates_panel_names()
     local names = panel_names.value or {}
     assert.eq(
       names.body,
-      "android://logcat module=:app variant=debug app=com.saved filter=Auth level=E",
+      "android://logcat module=:app variant=debug app=com.saved filter=Auth level=E device=device-1",
       "body name after level"
     )
   end)
@@ -133,12 +133,12 @@ local function filter_picker_receives_dynamic_panel_names()
   local names = captured_names("Crash")
   assert.eq(
     names.prompt,
-    "android://logcat-filter module=:app variant=debug app=com.saved filter=Crash level=W",
+    "android://logcat-filter module=:app variant=debug app=com.saved filter=Crash level=W device=device-1",
     "filter prompt name"
   )
   assert.eq(
     names.results,
-    "android://logcat-filter-results module=:app variant=debug app=com.saved filter=Crash level=W",
+    "android://logcat-filter-results module=:app variant=debug app=com.saved filter=Crash level=W device=device-1",
     "filter results name"
   )
 end
