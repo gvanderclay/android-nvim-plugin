@@ -164,6 +164,7 @@ local function filter_picker_receives_prompt_text()
     ["android.ui.picker"] = {
       filter_input = function(opts)
         captured.prompt_title = opts.prompt_title
+        captured.input_title = opts.input_title
         captured.input_prompt = opts.input_prompt
       end,
     },
@@ -172,7 +173,8 @@ local function filter_picker_receives_prompt_text()
   logcat_helpers.with_logcat_context({ state = state, stubs = stubs }, function(ctx)
     logcat_helpers.start_filter_edit(ctx)
     assert.eq(captured.prompt_title, "Logcat filter", "prompt title")
-    assert.eq(captured.input_prompt, "Logcat filter: ", "input prompt")
+    assert.eq(captured.input_title, "Logcat filter:", "input title")
+    assert.eq(captured.input_prompt, "", "input prompt")
   end)
 end
 

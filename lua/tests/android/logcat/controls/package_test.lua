@@ -196,9 +196,9 @@ local function header_enter_prompts_for_package_and_filter_modal()
       call.prompt or "",
       #input_calls,
       filter_call.prompt_title or "",
-      filter_call.input_prompt or ""
+      filter_call.input_title or ""
     )
-    assert.eq(summary, "1|Logcat package: |1|Logcat filter|Logcat filter: ", "header enter")
+    assert.eq(summary, "1|Logcat package: |1|Logcat filter|Logcat filter:", "header enter")
   end)
 end
 

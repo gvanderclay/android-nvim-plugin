@@ -71,7 +71,10 @@ end
 
 local function fallback_filter_input(options)
   local title = options.prompt_title or "Filter"
-  local prompt = options.input_prompt or title
+  local prompt = options.input_prompt
+  if prompt == nil then
+    prompt = title
+  end
   local input_title = options.input_title
   if input_title == nil then
     input_title = options.input_prompt and "" or title
@@ -101,8 +104,12 @@ local function fallback_filter_input(options)
     return
   end
 
+  local fallback_prompt = prompt
+  if fallback_prompt == "" and input_title and input_title ~= "" then
+    fallback_prompt = input_title .. " "
+  end
   vim.ui.input({
-    prompt = prompt,
+    prompt = fallback_prompt,
     default = options.default or "",
   }, function(value)
     if value == nil then
