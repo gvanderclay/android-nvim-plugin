@@ -11,6 +11,9 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 - Build and logcat dock panels now support consistent `q` / `<Esc>` close
   controls, and dock body windows keep a fixed height when additional splits
   are opened.
+- Logcat severity highlights now default-link to Neovim diagnostic highlight
+  groups so colorschemes can style them consistently without plugin-specific
+  overrides.
 
 ## [0.6.0] - 2026-03-25
 
