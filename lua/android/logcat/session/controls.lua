@@ -123,6 +123,7 @@ local function start_filter_edit(session, deps)
   local build_context = resolve_build_context(session)
   picker().filter_input({
     prompt_title = "Logcat filter",
+    input_prompt = "Logcat filter: ",
     items = session.filter_history or {},
     default = session.filter,
     panel_names = function(query)

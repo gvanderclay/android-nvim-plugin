@@ -20,6 +20,9 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 - Logcat severity highlights now default-link to Neovim diagnostic highlight
   groups so colorschemes can style them consistently without plugin-specific
   overrides.
+- Filter inputs now use the plugin's live-updating floating prompt when
+  Telescope is unavailable, and the logcat filter fallback prompt now displays
+  as `Logcat filter: `.
 
 ## [0.6.0] - 2026-03-25
 
